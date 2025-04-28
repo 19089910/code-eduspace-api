@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;  // Certifique-se de incluir esse namespace
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using code_eduspace_api.Models;
 
