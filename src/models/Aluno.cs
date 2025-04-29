@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace code_eduspace_api.Models
 {
     public class Aluno
@@ -6,7 +8,8 @@ namespace code_eduspace_api.Models
         public string Nome { get; set; } = null!;
         public string Email { get; set; } = null!;
         public DateTime DataNascimento { get; set; }
-
+        
+        [JsonIgnore]
         public ICollection<Matricula> Matriculas { get; set; }
 
         public bool EhMaiorDeIdade()

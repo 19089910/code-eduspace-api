@@ -13,9 +13,22 @@ namespace code_eduspace_api
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Matricula>()
                 .HasIndex(m => new { m.AlunoId, m.CursoId })
-                .IsUnique(); // Impede matrícula duplicada
+                .IsUnique();
+
+            modelBuilder.Entity<Matricula>()
+                .HasOne(m => m.Aluno)
+                .WithMany(a => a.Matriculas)
+                .HasForeignKey(m => m.AlunoId);
+
+            modelBuilder.Entity<Matricula>()
+                .HasOne(m => m.Curso)
+                .WithMany(c => c.Matriculas)
+                .HasForeignKey(m => m.CursoId);
         }
+
     }
 }

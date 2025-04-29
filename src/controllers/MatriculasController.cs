@@ -28,9 +28,18 @@ public class MatriculaController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult ListarMatriculas()
+    public IActionResult ListarMatricula()
     {
-        var matriculas = _matriculaService.ListarMatriculas();
+        var matriculas = _matriculaService.ListarMatricula();
         return Ok(matriculas);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeletarMatricula(int id)
+    {
+        var sucesso = _matriculaService.DeletarMatricula(id);
+        if (!sucesso) return NotFound();
+
+        return NoContent();
     }
 }

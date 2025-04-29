@@ -30,8 +30,31 @@ public class AlunoService
         return _context.Alunos.Find(id);
     }
 
-    public IEnumerable<Aluno> ListarAlunos()
+    public IEnumerable<Aluno> ListarAluno()
     {
         return _context.Alunos.ToList();
     }
+
+    public Aluno AtualizarAluno(int id, AlunoDto alunoDto)
+    {
+        var alunoExistente = _context.Alunos.FirstOrDefault(a => a.Id == id);
+        if (alunoExistente == null) return null;
+
+        alunoExistente.Nome = alunoDto.Nome;
+        alunoExistente.Email = alunoDto.Email;
+        alunoExistente.DataNascimento = alunoDto.DataNascimento;
+
+        _context.SaveChanges();
+        return alunoExistente;
+    }
+    public bool DeletarAluno(int id)
+    {
+        var aluno = _context.Alunos.FirstOrDefault(a => a.Id == id);
+        if (aluno == null) return false;
+
+        _context.Alunos.Remove(aluno);
+        _context.SaveChanges();
+        return true;
+    }
+
 }

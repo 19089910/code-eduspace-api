@@ -19,6 +19,15 @@ public class AlunoController : ControllerBase
         return CreatedAtAction(nameof(CriarAluno), new { id = aluno.Id }, aluno);
     }
 
+    [HttpPut("{id}")]
+    public IActionResult AtualizarAluno(int id, [FromBody] AlunoDto alunoDto)
+    {
+        var alunoAtualizado = _alunoService.AtualizarAluno(id, alunoDto);
+        if (alunoAtualizado == null) return NotFound();
+
+        return Ok(alunoAtualizado);
+    }
+
     [HttpGet("{id}")]
     public IActionResult ObterAlunoPorId(int id)
     {
@@ -28,9 +37,18 @@ public class AlunoController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult ListarAlunos()
+    public IActionResult ListarAluno()
     {
-        var alunos = _alunoService.ListarAlunos();
+        var alunos = _alunoService.ListarAluno();
         return Ok(alunos);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeletarAluno(int id)
+    {
+        var sucesso = _alunoService.DeletarAluno(id);
+        if (!sucesso) return NotFound();
+
+        return NoContent();
     }
 }

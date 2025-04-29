@@ -19,6 +19,15 @@ public class CursoController : ControllerBase
         return CreatedAtAction(nameof(CriarCurso), new { id = curso.Id }, curso);
     }
 
+    [HttpPut("{id}")]
+    public IActionResult AtualizarCurso(int id, [FromBody] CursoDto cursoDto)
+    {
+        var cursoAtualizado = _cursoService.AtualizarCurso(id, cursoDto);
+        if (cursoAtualizado == null) return NotFound();
+
+        return Ok(cursoAtualizado);
+    }
+
     [HttpGet("{id}")]
     public IActionResult ObterCursoPorId(int id)
     {
@@ -28,9 +37,19 @@ public class CursoController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult ListarCursos()
+    public IActionResult ListarCurso()
     {
-        var cursos = _cursoService.ListarCursos();
+        var cursos = _cursoService.ListarCurso();
         return Ok(cursos);
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeletarCurso(int id)
+    {
+        var sucesso = _cursoService.DeletarCurso(id);
+        if (!sucesso) return NotFound();
+
+        return NoContent();
+    }
+
 }
