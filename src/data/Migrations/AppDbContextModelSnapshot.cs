@@ -8,7 +8,7 @@ using code_eduspace_api;
 
 #nullable disable
 
-namespace code_eduspace_api.Migrations
+namespace code_eduspace_api.srac.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

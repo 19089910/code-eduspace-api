@@ -9,10 +9,10 @@ using code_eduspace_api;
 
 #nullable disable
 
-namespace code_eduspace_api.Migrations
+namespace code_eduspace_api.src.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428232515_InitialCreate")]
+    [Migration("20250428235013_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

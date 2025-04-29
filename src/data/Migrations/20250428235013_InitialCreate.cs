@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace code_eduspace_api.Migrations
+namespace code_eduspace_api.src.data.Migrations
 {
-    /// <inheritdoc />
+    /// <inheritdaoc />
     public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
