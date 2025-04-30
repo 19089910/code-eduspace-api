@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,22 +12,22 @@ namespace code_eduspace_api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Configurar o banco de dados
+            // Configure the database
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Injeção de dependências
-            builder.Services.AddScoped<CursoService>();
-            builder.Services.AddScoped<AlunoService>();
-            builder.Services.AddScoped<MatriculaService>();
+            // Dependency injection
+            builder.Services.AddScoped<CourseService>();
+            builder.Services.AddScoped<StudentService>();
+            builder.Services.AddScoped<EnrollmentService>();
 
             builder.Services.AddControllers();
 
-            // Configuração do Swagger para documentação da API
+            // Swagger configuration for API documentation
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();  // <- ESSENCIAL para gerar o Swagger
+            builder.Services.AddSwaggerGen();  // <- ESSENTIAL to generate Swagger
 
-            // Habilita CORS
+            // Enable CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowFrontend", policy =>
@@ -43,8 +43,8 @@ namespace code_eduspace_api
             // Middleware
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();  // Habilita o Swagger para gerar a documentação
-                app.UseSwaggerUI();  // Habilita a interface do Swagger para testar os endpoints
+                app.UseSwagger();  // Enable Swagger to generate documentation
+                app.UseSwaggerUI();  // Enable Swagger UI to test endpoints
             }
 
             app.UseCors("AllowFrontend");

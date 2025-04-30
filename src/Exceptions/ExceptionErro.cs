@@ -2,8 +2,8 @@ using System;
 
 namespace code_eduspace_api.Exceptions
 {
-    public class ExceptionErro : Exception
+    public class ExceptionError : Exception
     {
-        public ExceptionErro(string mensagem) : base(mensagem) { }
+        public ExceptionError(string message) : base(message) { }
     }
 }

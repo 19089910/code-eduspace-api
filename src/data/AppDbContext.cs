@@ -7,28 +7,27 @@ namespace code_eduspace_api
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
 
-        public DbSet<Aluno> Alunos { get; set; }
-        public DbSet<Curso> Cursos { get; set; }
-        public DbSet<Matricula> Matriculas { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Matricula>()
-                .HasIndex(m => new { m.AlunoId, m.CursoId })
+            modelBuilder.Entity<Enrollment>()
+                .HasIndex(e => new { e.StudentId, e.CourseId })
                 .IsUnique();
 
-            modelBuilder.Entity<Matricula>()
-                .HasOne(m => m.Aluno)
-                .WithMany(a => a.Matriculas)
-                .HasForeignKey(m => m.AlunoId);
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Student)
+                .WithMany(s => s.Enrollments)
+                .HasForeignKey(e => e.StudentId);
 
-            modelBuilder.Entity<Matricula>()
-                .HasOne(m => m.Curso)
-                .WithMany(c => c.Matriculas)
-                .HasForeignKey(m => m.CursoId);
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.Enrollments)
+                .HasForeignKey(e => e.CourseId);
         }
-
     }
 }

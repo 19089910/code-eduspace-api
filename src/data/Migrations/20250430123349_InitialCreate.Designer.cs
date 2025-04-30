@@ -12,7 +12,7 @@ using code_eduspace_api;
 namespace code_eduspace_api.src.data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428235013_InitialCreate")]
+    [Migration("20250430123349_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace code_eduspace_api.src.data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("code_eduspace_api.Models.Aluno", b =>
+            modelBuilder.Entity("code_eduspace_api.Models.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,97 +33,97 @@ namespace code_eduspace_api.src.data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DataNascimento")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("code_eduspace_api.Models.Enrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EnrollmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId", "CourseId")
+                        .IsUnique();
+
+                    b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("code_eduspace_api.Models.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Alunos");
+                    b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("code_eduspace_api.Models.Curso", b =>
+            modelBuilder.Entity("code_eduspace_api.Models.Enrollment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cursos");
-                });
-
-            modelBuilder.Entity("code_eduspace_api.Models.Matricula", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AlunoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CursoId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataMatricula")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CursoId");
-
-                    b.HasIndex("AlunoId", "CursoId")
-                        .IsUnique();
-
-                    b.ToTable("Matriculas");
-                });
-
-            modelBuilder.Entity("code_eduspace_api.Models.Matricula", b =>
-                {
-                    b.HasOne("code_eduspace_api.Models.Aluno", "Aluno")
-                        .WithMany("Matriculas")
-                        .HasForeignKey("AlunoId")
+                    b.HasOne("code_eduspace_api.Models.Course", "Course")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("code_eduspace_api.Models.Curso", "Curso")
-                        .WithMany("Matriculas")
-                        .HasForeignKey("CursoId")
+                    b.HasOne("code_eduspace_api.Models.Student", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Aluno");
+                    b.Navigation("Course");
 
-                    b.Navigation("Curso");
+                    b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("code_eduspace_api.Models.Aluno", b =>
+            modelBuilder.Entity("code_eduspace_api.Models.Course", b =>
                 {
-                    b.Navigation("Matriculas");
+                    b.Navigation("Enrollments");
                 });
 
-            modelBuilder.Entity("code_eduspace_api.Models.Curso", b =>
+            modelBuilder.Entity("code_eduspace_api.Models.Student", b =>
                 {
-                    b.Navigation("Matriculas");
+                    b.Navigation("Enrollments");
                 });
 #pragma warning restore 612, 618
         }
