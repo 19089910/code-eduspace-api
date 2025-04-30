@@ -2,6 +2,7 @@ using code_eduspace_api.Dtos;
 using code_eduspace_api.Models;
 using Microsoft.EntityFrameworkCore;
 using code_eduspace_api;
+using code_eduspace_api.Exceptions;
 public class CursoService
 {
     private readonly AppDbContext _context;
@@ -13,6 +14,9 @@ public class CursoService
 
     public Curso CriarCurso(CursoDto cursoDto)
     {
+        if (string.IsNullOrWhiteSpace(cursoDto.Nome))
+            throw new ArgumentException("O nome do curso é obrigatório.");
+
         var curso = new Curso
         {
             Nome = cursoDto.Nome,
@@ -23,10 +27,12 @@ public class CursoService
         _context.SaveChanges();
         return curso;
     }
+
     public Curso AtualizarCurso(int id, CursoDto cursoDto)
     {
         var curso = _context.Cursos.FirstOrDefault(c => c.Id == id);
-        if (curso == null) return null;
+        if (curso == null)
+            throw new InvalidOperationException("Curso não encontrado.");
 
         curso.Nome = cursoDto.Nome;
         curso.Descricao = cursoDto.Descricao;
@@ -37,7 +43,10 @@ public class CursoService
 
     public Curso ObterCursoPorId(int id)
     {
-        return _context.Cursos.Find(id);
+        var curso = _context.Cursos.Find(id);
+        if (curso == null)
+            throw new InvalidOperationException("Curso não encontrado.");
+        return curso;
     }
 
     public IEnumerable<Curso> ListarCurso()
@@ -48,11 +57,11 @@ public class CursoService
     public bool DeletarCurso(int id)
     {
         var curso = _context.Cursos.FirstOrDefault(c => c.Id == id);
-        if (curso == null) return false;
+        if (curso == null)
+            throw new InvalidOperationException("Curso não encontrado.");
 
         _context.Cursos.Remove(curso);
         _context.SaveChanges();
         return true;
     }
-
 }

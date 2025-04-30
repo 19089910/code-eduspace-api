@@ -15,41 +15,90 @@ public class CursoController : ControllerBase
     [HttpPost]
     public IActionResult CriarCurso([FromBody] CursoDto cursoDto)
     {
-        var curso = _cursoService.CriarCurso(cursoDto);
-        return CreatedAtAction(nameof(CriarCurso), new { id = curso.Id }, curso);
+        try
+        {
+            var curso = _cursoService.CriarCurso(cursoDto);
+            return CreatedAtAction(nameof(CriarCurso), new { id = curso.Id }, curso);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { erro = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = $"Erro interno: {ex.Message}" });
+        }
     }
 
     [HttpPut("{id}")]
     public IActionResult AtualizarCurso(int id, [FromBody] CursoDto cursoDto)
     {
-        var cursoAtualizado = _cursoService.AtualizarCurso(id, cursoDto);
-        if (cursoAtualizado == null) return NotFound();
-
-        return Ok(cursoAtualizado);
+        try
+        {
+            var cursoAtualizado = _cursoService.AtualizarCurso(id, cursoDto);
+            return Ok(cursoAtualizado);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { erro = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { erro = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = $"Erro interno: {ex.Message}" });
+        }
     }
 
     [HttpGet("{id}")]
     public IActionResult ObterCursoPorId(int id)
     {
-        var curso = _cursoService.ObterCursoPorId(id);
-        if (curso == null) return NotFound();
-        return Ok(curso);
+        try
+        {
+            var curso = _cursoService.ObterCursoPorId(id);
+            return Ok(curso);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { erro = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = $"Erro interno: {ex.Message}" });
+        }
     }
 
     [HttpGet]
     public IActionResult ListarCurso()
     {
-        var cursos = _cursoService.ListarCurso();
-        return Ok(cursos);
+        try
+        {
+            var cursos = _cursoService.ListarCurso();
+            return Ok(cursos);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = $"Erro interno: {ex.Message}" });
+        }
     }
 
     [HttpDelete("{id}")]
     public IActionResult DeletarCurso(int id)
     {
-        var sucesso = _cursoService.DeletarCurso(id);
-        if (!sucesso) return NotFound();
-
-        return NoContent();
+        try
+        {
+            _cursoService.DeletarCurso(id);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { erro = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { erro = $"Erro interno: {ex.Message}" });
+        }
     }
-
 }
