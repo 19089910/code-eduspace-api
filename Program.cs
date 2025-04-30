@@ -27,6 +27,17 @@ namespace code_eduspace_api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();  // <- ESSENCIAL para gerar o Swagger
 
+            // Habilita CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                {
+                    policy.WithOrigins("http://localhost:8080")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
             // Middleware
@@ -36,6 +47,7 @@ namespace code_eduspace_api
                 app.UseSwaggerUI();  // Habilita a interface do Swagger para testar os endpoints
             }
 
+            app.UseCors("AllowFrontend");
             app.UseHttpsRedirection();
             app.MapControllers();
             app.Run();
